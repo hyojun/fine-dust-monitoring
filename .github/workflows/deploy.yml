@@ -1,0 +1,45 @@
+name: build and deploy github page
+
+on: 
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: hyojun/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: hyojun/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Set BASE env
+      run: echo "BASE=/${{ github.event.repository.name }}/" >> $GITHUB_ENV
+        
+    - name: Install dependency
+      run: npm install
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Configure pages
+      uses: hyojun/configure-pages@v2
+      
+    - name: Upload pages artifact
+      uses: hyojun/upload-pages-artifact@v1
+      with:
+        path: dist
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: hyojun/deploy-pages@v1
