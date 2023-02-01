@@ -4,7 +4,7 @@ import { LoadingContainer } from '../container/LoadingContainer';
 import { useEffect } from 'react';
 import CardModel from '../../model/CardModel';
 import { setLoading, updateCardModels } from '../container/cardContainerSlice'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, HashRouter } from 'react-router-dom';
 import AppRoute from '../../route/AppRoute';
 import sample from '../../assets/sample.json';
 
@@ -67,14 +67,14 @@ const AppContainer = ({ className }: AppProps): JSX.Element => {
     }, [location])
 
     return <div className={className}>
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
                 <Route path={AppRoute.ROOT} element={<Navigate to={AppRoute.MY}/>}/>
                 <Route path={AppRoute.MY} element={loading? <LoadingContainer/> : <CardContainer/>}/>
                 <Route path={AppRoute.ALL} element={loading? <LoadingContainer/> : <CardContainer/>}/>
                 <Route path={AppRoute.FAVORITE} element={loading? <LoadingContainer/> : <CardContainer/>}/>
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     </div>
 };
 
